@@ -89,7 +89,7 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 		$cells=array();
 		$i=1;
 		$res2=$GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'cache_id, page_id, language_id, rootpage_id, mpvar,hash,pagepath,expire',
+			'cache_id, page_id, language_id, rootpage_id, mpvar, pagepath, expire',
 			'tx_realurl_pathcache',
 			'page_id='.$id);
 
@@ -128,17 +128,17 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 		$actionError='';
 		while($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)){
 			$this->shownCacheId.=$row2['cache_id'].',';
-			$tr_id=' id="id_'.$row2['cache_id'].'_'.$row2['page_id'].'_'.$row2['hash'].'"';
+			$tr_id=' id="id_'.$row2['cache_id'].'_'.$row2['page_id'].'"';
 			$editline=$row2['pagepath'];
 			$expireline=$this->helpfunc->getDateTime($row2['expire']);
 			if($this->pObj->perms_pages_delete){
-				$aHrefDelete = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=delete&delete=one&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&act_hash='.$row2['hash'].'&tstamp='.time();
+				$aHrefDelete = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=delete&delete=one&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&tstamp='.time();
 				$deleteRecord='<td class="bgColor5" nowrap="nowrap">&nbsp;<a href="'.htmlspecialchars($aHrefDelete).'" onclick="'.htmlspecialchars('return confirm('.$LANG->JScharCode($LANG->getLL('deleteWarning')).');').'"><img'.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/garbage.gif','width="12" height="12"').' border="0" title="'.$LANG->getLL('deleteItem',1).'" alt="" /></a>&nbsp;</td>';
 			};
 			if($this->pObj->perms_pages_expire){
-				$aHrefExpire = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=expire&expire=one&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&act_hash='.$row2['hash'].'&tstamp='.time();
+				$aHrefExpire = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=expire&expire=one&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&tstamp='.time();
 				$expireRecord='<td class="bgColor5" nowrap="nowrap">&nbsp;<a href="'.htmlspecialchars($aHrefExpire).'" onclick="'.htmlspecialchars('return confirm('.$LANG->JScharCode($LANG->getLL('getPages_changeExpireWarning')).');').'"><img'.t3lib_iconWorks::skinImg('../','gfx/set_expire.gif','width="9" height="9"').' border="0" title="'.$LANG->getLL('getPages_changeExpire',1).'" alt="" /></a>&nbsp;</td>';
-				if(($this->action=='expire')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid)&&($row2['hash']==$this->action_hash)&&($this->showEditInput)){
+				if(($this->action=='expire')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid) && ($this->showEditInput)){
 					$expireRecord=$emptyRow2;
 					$expireInput['cb']='';
 					$expireInput['integer']=0;
@@ -162,7 +162,6 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 					$expireline.='<input type="image" '.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/closedok.gif','').' width="21" height="16" name="closedok" id="closedok" title="'.$LANG->getLL('edit_close').'"/>';
 					$expireline.='<input type="hidden" name="act_cacheid" value="'.$row2['cache_id'].'" />';
 					$expireline.='<input type="hidden" name="act_pageid" value="'.$row2['page_id'].'" />';
-					$expireline.='<input type="hidden" name="act_hash" value="'.$row2['hash'].'" />';
 					$expireline.='<input type="hidden" name="act" value="expire" />';
 
 					$this->helpfunc->writeJSForDateTimeValidation();
@@ -183,9 +182,9 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 				};
 			};
 			if($this->pObj->perms_pages_edit){
-				$aHrefEdit = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=edit&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&act_hash='.$row2['hash'].'&tstamp='.time();
+				$aHrefEdit = 'index.php?mode='.$this->pObj->MOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=edit&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&tstamp='.time();
 				$editRecord='<td class="bgColor5" nowrap="nowrap">&nbsp;<a href="'.htmlspecialchars($aHrefEdit).'" onclick="'.htmlspecialchars('return confirm('.$LANG->JScharCode($LANG->getLL('getPages_editWarning')).');').'"><img'.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/edit2.gif','width="12" height="12"').' border="0" title="'.$LANG->getLL('edit',1).'" alt="" /></a>&nbsp;</td>';
-				if(($this->action=='edit')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid)&&($row2['hash']==$this->action_hash)&&($this->showEditInput)){
+				if(($this->action=='edit')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid) && ($this->showEditInput)){
 					$wholePath=$editline;
 					if($this->nameExist){$editline=$this->pageTitle; $wholePath=$this->pageTitle;}
 					$editValues=$this->getPagesEditValue($editline);
@@ -198,7 +197,6 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 					$editline.='<input type="hidden" name="act_cacheid" value="'.$row2['cache_id'].'" />';
 					$editline.='<input type="hidden" name="act_pageid" value="'.$row2['page_id'].'" />';
 					$editline.='<input type="hidden" name="act_langid" value="'.$row2['language_id'].'" />';
-					$editline.='<input type="hidden" name="act_hash" value="'.$row2['hash'].'" />';
 					$editline.='<input type="hidden" name="page_before" value="'.$editValues[2].'" />';
 					$editline.='<input type="hidden" name="act_wholepage" value="'.$wholePath.'" />';
 					$editline.='<input type="hidden" name="act_segment" value="'.$editValues[1].'" />';
@@ -219,11 +217,11 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 				};
 			};
 			if($this->pObj->perms_pages_create){
-				$aHrefCreate = 'index.php?mode='.$this->pObjMOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=create&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&act_hash='.$row2['hash'].'&tstamp='.time();
+				$aHrefCreate = 'index.php?mode='.$this->pObjMOD_SETTINGS['mode'].'&depth='.$this->pObj->MOD_SETTINGS['depth'].'&id='.$this->pObj->pageuid.'&act=create&act_cacheid='.$row2['cache_id'].'&act_pageid='.$row2['page_id'].'&tstamp='.time();
 				$createRecord='<td class="bgColor5" nowrap="nowrap">&nbsp;<a href="'.htmlspecialchars($aHrefCreate).'" onclick="'.htmlspecialchars('return confirm('.$LANG->JScharCode($LANG->getLL('getPages_createWarning')).');').'"><img'.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/new_el.gif','width="11" height="12"').' border="0" title="'.$LANG->getLL('getPages_create',1).'" alt="" /></a>&nbsp;</td>';
 			};
 
-			if(($this->actionError!='')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid)&&($row2['hash']==$this->action_hash)){
+			if(($this->actionError!='')&&($row2['cache_id']==$this->action_cacheid)&&($row2['page_id']==$this->action_pageid)){
 				$actionError='
 				<tr'.$tr_id.'>
 					<td nowrap="nowrap"'.$bgCol.'>'.$IMAGES_OUT[2].'&nbsp;</td>
@@ -429,13 +427,12 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 		/* actions begin */
 		$this->action=t3lib_div::_GP('act')==''?t3lib_div::_GP('act2'):t3lib_div::_GP('act');
 		$this->action_showcacheid=trim(t3lib_div::_GP('showcacheid'),',');
-		$this->action_hash=t3lib_div::_GP('act_hash');
 		$this->action_pageid=intval(t3lib_div::_GP('act_pageid'));
 		$this->action_cacheid=intval(t3lib_div::_GP('act_cacheid'));
 		$this->action_langid=intval(t3lib_div::_GP('act_langid'));
 		/* delete only one page begin */
 		if(($this->action=='delete')&&($this->pObj->perms_pages_delete)){
-			if(($this->action_pageid!=0)&&($this->action_cacheid!=0)&&($this->action_hash!='')){
+			if(($this->action_pageid!=0)&&($this->action_cacheid!=0)){
 				/* make log begin */
 				$res_log=$GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
@@ -448,7 +445,7 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 					}
 				}
 				/* make log end*/
-				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_realurl_pathcache','cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid.' AND hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache'));
+				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_realurl_pathcache','cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid);
 				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_realurl_urldecodecache','page_id='.$this->action_pageid);
 				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_realurl_urlencodecache','page_id='.$this->action_pageid);
 			};
@@ -484,40 +481,37 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 
 		}
 		/* ked vytvaram uplne novy end */
-		if(($this->action=='create')&&($this->action_pageid!=0)&&($this->action_cacheid!=0)&&($this->action_hash!='')){
+		if(($this->action=='create')&&($this->action_pageid!=0)&&($this->action_cacheid!=0)){
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 				'tx_realurl_pathcache',
-				'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid.' AND hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache'),
+				'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid,
 				array('expire'=>time())
 			);
 			$res=$GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'page_id,language_id,rootpage_id,mpvar,hash,pagepath',
+				'page_id, language_id, rootpage_id, mpvar, pagepath',
 				'tx_realurl_pathcache',
-				'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid.' AND hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache')
+				'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid
 			);
 			if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0){
 				$row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				$page=$row['pagepath'].'_new_'.time();
-				$hash=substr(md5($page),0,10);
 				$insert_array['page_id']=$row['page_id'];
 				$insert_array['language_id']=$row['language_id'];
 				$insert_array['expire']=0;
 				$insert_array['rootpage_id']=$row['rootpage_id'];
 				$insert_array['mpvar']=$row['mpvar'];
 				$insert_array['pagepath']=$page;
-				$insert_array['hash']=$hash;
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_realurl_pathcache',$insert_array);
 				$this->action='edit';
 				$this->action_cacheid=$GLOBALS['TYPO3_DB']->sql_insert_id();
-				$this->action_hash=$hash;
 			};
 		}
 
 		/* create end */
 		/* expire begin */
-		if(($this->action=='expire')&&($this->action_pageid!=0)&&($this->action_cacheid!=0)&&($this->action_hash!='')&&($this->pObj->perms_pages_expire)){
-			$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid.'_'.$this->action_hash;
-			$retarray=$this->helpfunc->changeExpireDate('tx_realurl_pathcache','cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid.' AND hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache'),'expire');
+		if(($this->action=='expire')&&($this->action_pageid!=0)&&($this->action_cacheid!=0)&&($this->pObj->perms_pages_expire)){
+			$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid;
+			$retarray=$this->helpfunc->changeExpireDate('tx_realurl_pathcache','cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid,'expire');
 			$this->action_save=$retarray['action_save'];
 			$this->showEditInput=$retarray['showEditInput'];
 		}
@@ -533,21 +527,21 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 		/* edit begin */
 		if(($this->action=='edit')&&($this->pObj->perms_pages_edit)){
 			$this->showEditInput=true;
-			$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid.'_'.$this->action_hash;
+			$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid;
 			if((intval(t3lib_div::_GP('editsave_x'))!=0)&&(intval(t3lib_div::_GP('editsave_y'))!=0)){
 				//klikol na save
 				$this->action_save=true;
 				$this->showEditInput=false;
-				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid.'_'.$this->action_hash;
+				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid;
 			}
 			if((intval(t3lib_div::_GP('closedok_x'))!=0)&&(intval(t3lib_div::_GP('closedok_y'))!=0)){
 				//klikol na close
 				$this->action_save=false;
 				$this->showEditInput=false;
-				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid.'_'.$this->action_hash;
+				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid;
 			}
-			if(($this->action_save)&&($this->action_pageid!=0)&&($this->action_cacheid!=0)&&($this->action_hash!='')){
-				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid.'_'.$this->action_hash;
+			if(($this->action_save)&&($this->action_pageid!=0)&&($this->action_cacheid!=0)){
+				$action_scroll='id_'.$this->action_cacheid.'_'.$this->action_pageid;
 				$newTitle1=t3lib_div::_GP('action_path');
 				$action_wholePage=t3lib_div::_GP('act_editwholepage');
 				if($newTitle1!=''){
@@ -569,7 +563,7 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 						$res_num=$GLOBALS['TYPO3_DB']->exec_SELECTquery(
 							'cache_id',
 							'tx_realurl_pathcache',
-							'language_id='.$this->action_langid.' AND (cache_id <> '.$this->action_cacheid.' OR page_id <> '.$this->action_pageid.' OR  NOT hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache').') AND pagepath='.$GLOBALS['TYPO3_DB']->fullQuoteStr($newTitle,'tx_realurl_pathcache')
+							'language_id='.$this->action_langid.' AND (cache_id <> '.$this->action_cacheid.' OR page_id <> '.$this->action_pageid.') AND pagepath='.$GLOBALS['TYPO3_DB']->fullQuoteStr($newTitle,'tx_realurl_pathcache')
 						);
 						if($GLOBALS['TYPO3_DB']->sql_num_rows($res_num) >0 ){
 							$this->actionError=$LANG->getLL('getPages_editSaveExist',1);
@@ -582,10 +576,9 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 
 							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 								'tx_realurl_pathcache',
-								'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid.' AND hash='.$GLOBALS['TYPO3_DB']->fullQuoteStr($this->action_hash,'tx_realurl_pathcache'),
+								'cache_id='.$this->action_cacheid.' AND page_id='.$this->action_pageid,
 								array(
 									'pagepath'=>$newTitle,
-									'hash'=>substr(md5($newTitle),0,10)
 								)
 							);
 							$this->showEditInput=false;
