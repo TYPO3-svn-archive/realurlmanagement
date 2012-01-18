@@ -87,8 +87,9 @@ class tx_realurlmanagement_helpfunc extends t3lib_SCbase {
 		$processedTitle = $encodingLib->specCharsToASCII($charset,$processedTitle);
 
 			// Strip the rest...:
-		$processedTitle = ereg_replace('[^a-zA-Z0-9\\'.$space.']', '', $processedTitle); // strip the rest
-		$processedTitle = ereg_replace('\\'.$space.'+',$space,$processedTitle); // Convert multiple 'spaces' to a single one
+		$processedTitle = preg_replace('/[^a-zA-Z0-9\\' . $space . ']/', '', $processedTitle);
+			// Convert multiple 'spaces' to a single one
+		$processedTitle = preg_replace('/\\' . $space . '+/', $space, $processedTitle);
 		$processedTitle = trim($processedTitle,$space);
 
 		// Return encoded URL:
