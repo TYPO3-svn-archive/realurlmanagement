@@ -115,7 +115,7 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 			/* ked vytvaram uplne novy end */
 			$return_page_tree.='
 			<tr>
-				<td nowrap="nowrap"'.$bgCol.'>'.$IMAGES_OUT[1].htmlspecialchars(t3lib_div::fixed_lgd($title,$this->pObj->tLen)).'&nbsp;</td>
+				<td nowrap="nowrap"' . $bgCol . '>' . $IMAGES_OUT[1] . htmlspecialchars(t3lib_div::fixed_lgd_cs($title, $this->pObj->tLen)) . '&nbsp;</td>
 				<td'.$bgCol.' nowrap="nowrap"><img'.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/line.gif','width="5" height="16"').' alt="" /></td>
 				'.$emptyRow1.'
 				'.$emptyRow2.'
@@ -238,7 +238,7 @@ class tx_realurlmanagement_pages extends t3lib_SCbase {
 			if($i==1){
 				$cells[]='
 					<tr'.$tr_id.'>
-						<td nowrap="nowrap"'.$bgCol.'>'.$IMAGES_OUT[1].htmlspecialchars(t3lib_div::fixed_lgd($title,$this->pObj->tLen)).'&nbsp;</td>
+						<td nowrap="nowrap"' . $bgCol . '>' . $IMAGES_OUT[1] . htmlspecialchars(t3lib_div::fixed_lgd_cs($title, $this->pObj->tLen)) . '&nbsp;</td>
 						<td'.$bgCol.' nowrap="nowrap"><img'.t3lib_iconWorks::skinImg($BACK_PATH,'gfx/line.gif','width="5" height="16"').' alt="" /></td>
 						'.$deleteRecord.'
 						'.$emptyRow2.'

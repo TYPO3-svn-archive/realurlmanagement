@@ -571,7 +571,7 @@ class tx_realurlmanagement_module1 extends t3lib_SCbase {
 				div.pagebrowser span{padding:0px 2px;}
 
 			';
-			$headerSection = $this->doc->getHeader("pages",$this->pageinfo,$this->pageinfo["_thePath"])."<br/>".$LANG->sL("LLL:EXT:lang/locallang_core.php:labels.path").": ".t3lib_div::fixed_lgd_pre($this->pageinfo["_thePath"],50);
+			$headerSection = $this->doc->getHeader('pages', $this->pageinfo,$this->pageinfo['_thePath']) . '<br/>' . $LANG->sL('LLL:EXT:lang/locallang_core.php:labels.path') . ': ' . t3lib_div::fixed_lgd_cs($this->pageinfo['_thePath'], -50);
 
 			$this->content.=$this->doc->startPage($LANG->getLL("title"));
 			$this->content.=$this->doc->header($LANG->getLL("title"));
